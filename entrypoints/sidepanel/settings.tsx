@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getSettings, saveSettings } from '../../lib/settings';
 import { DEFAULT_SETTINGS, type Settings } from '../../lib/types';
+import { PROVIDERS, providerForBaseUrl, CUSTOM_PROVIDER_KEY } from '../../lib/providers';
 
 const fieldStyle = { display: 'block', width: '100%', boxSizing: 'border-box' as const, marginTop: 4 };
 const labelStyle = { display: 'block', marginTop: 12, fontSize: 13, fontWeight: 600 };
@@ -19,6 +20,15 @@ export function SettingsForm() {
   const updateScoring = (patch: Partial<Settings['scoring']>) =>
     setSettings((current) => ({ ...current, scoring: { ...current.scoring, ...patch } }));
 
+  const selectedProvider = providerForBaseUrl(settings.llm.baseUrl);
+  const providerHint = PROVIDERS.find((provider) => provider.key === selectedProvider)?.hint;
+
+  const onSelectProvider = (key: string) => {
+    if (key === CUSTOM_PROVIDER_KEY) return;
+    const provider = PROVIDERS.find((entry) => entry.key === key);
+    if (provider) updateLlm({ baseUrl: provider.baseUrl, model: provider.model });
+  };
+
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     await saveSettings({ llm: settings.llm, scoring: settings.scoring });
@@ -28,6 +38,23 @@ export function SettingsForm() {
 
   return (
     <form onSubmit={onSubmit} style={{ fontFamily: 'system-ui, sans-serif', fontSize: 13 }}>
+      <label style={labelStyle}>
+        Provider
+        <select
+          style={fieldStyle}
+          value={selectedProvider}
+          onChange={(event) => onSelectProvider(event.target.value)}
+        >
+          {PROVIDERS.map((provider) => (
+            <option key={provider.key} value={provider.key}>
+              {provider.label}
+            </option>
+          ))}
+          <option value={CUSTOM_PROVIDER_KEY}>Custom</option>
+        </select>
+      </label>
+      {providerHint && <p style={{ margin: '4px 0 0', fontSize: 12, color: '#71767b' }}>{providerHint}</p>}
+
       <label style={labelStyle}>
         Base URL
         <input
