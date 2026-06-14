@@ -232,7 +232,7 @@ reasons, no duplicates, no scroll jank. (No live X needed.)
 COMMIT, then proceed to commit 6.
 
 ---
-⬜ Commit 6: LLM client (request builder + parser, TDD)
+✅ Commit 6: LLM client (request builder + parser, TDD)
 
 ### Brief requirement
 Build an OpenAI-compatible vision chat request and parse streamed + non-streamed responses.
