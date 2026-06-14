@@ -207,7 +207,7 @@ per tweet. (No live X needed.)
 COMMIT, then proceed to commit 5.
 
 ---
-⬜ Commit 5: Inject scoring pills into the timeline
+✅ Commit 5: Inject scoring pills into the timeline
 
 ### Brief requirement
 Render green/red pills (with reason tooltips) on timeline tweets, live as you scroll.
