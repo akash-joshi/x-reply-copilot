@@ -21,13 +21,26 @@ npm test             # unit tests (scoring, LLM client, crop math, DOM parsing)
 ### Local model
 
 ```bash
-ollama pull qwen2.5vl:3b   # the default model; or llama3.2-vision / qwen2.5vl:7b
+ollama pull qwen3.5:9b     # the default vision model; or qwen2.5vl:3b for a lighter one
 ollama serve               # http://localhost:11434
 ```
 
-The default settings target `http://localhost:11434/v1` with `qwen2.5vl:3b`. Change the
+The default settings target `http://localhost:11434/v1` with `qwen3.5:9b`. Change the
 base URL, model, API key, and system prompt in the side panel's Settings section to use
-a larger model or a hosted OpenAI-compatible provider.
+a different model or a hosted OpenAI-compatible provider.
+
+### Allow the extension's origin
+
+Ollama rejects requests whose `Origin` isn't allow-listed, and a browser extension's
+origin is `chrome-extension://<id>`, so out of the box the extension gets HTTP 403. Allow
+it once:
+
+```bash
+launchctl setenv OLLAMA_ORIGINS "chrome-extension://*"
+```
+
+then fully quit and reopen Ollama.app. To make it survive reboots, add a LaunchAgent that
+re-applies it at login (see `com.local.ollama-origins.plist`).
 
 ### End-to-end check
 

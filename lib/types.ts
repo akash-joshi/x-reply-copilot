@@ -32,7 +32,7 @@ export const DEFAULT_SETTINGS: Settings = {
   llm: {
     baseUrl: 'http://localhost:11434/v1',
     apiKey: '',
-    model: 'qwen2.5vl:3b',
+    model: 'qwen3.5:9b',
     systemPrompt:
       'You are a witty, well-informed reply assistant for X/Twitter. ' +
       'You are shown an image of a single tweet, which may include text, ' +

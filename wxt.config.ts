@@ -7,7 +7,11 @@ export default defineConfig({
     name: 'X-Reply Copilot',
     description: 'Local vision-LLM reply co-pilot for X/Twitter',
     permissions: ['sidePanel', 'storage', 'activeTab', 'scripting'],
-    host_permissions: ['http://localhost:11434/*'],
+    host_permissions: [
+      'https://x.com/*',
+      'https://twitter.com/*',
+      'http://localhost:11434/*',
+    ],
     action: {},
   },
 });

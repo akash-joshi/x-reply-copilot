@@ -2,7 +2,35 @@ import { useState } from 'react';
 import { captureFocusedTweet } from '../../lib/capture';
 import { buildChatRequest, streamChat } from '../../lib/llm-client';
 import { getSettings } from '../../lib/settings';
-import { GET_FOCUSED_TWEET_RECT, isErrorResponse, type ContentResponse } from '../../lib/messaging';
+import type { ContentResponse } from '../../lib/messaging';
+
+/**
+ * Runs in the X page via scripting.executeScript. Must be fully self-contained
+ * (no imports/outer references) because it's serialised and injected. Returns the
+ * tweet nearest the viewport centre.
+ */
+function findFocusedTweetRect(): ContentResponse {
+  const centreY = window.innerHeight / 2;
+  let best: { rect: DOMRect; handle?: string } | undefined;
+  let bestDistance = Infinity;
+  for (const article of document.querySelectorAll('article[data-testid="tweet"]')) {
+    const rect = article.getBoundingClientRect();
+    if (rect.height === 0 || rect.bottom < 0 || rect.top > window.innerHeight) continue;
+    const distance = Math.abs((rect.top + rect.bottom) / 2 - centreY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      const text = article.querySelector('[data-testid="User-Name"]')?.textContent ?? '';
+      best = { rect, handle: (text.match(/@(\w+)/) ?? [])[1] };
+    }
+  }
+  if (!best) return { error: 'No tweet is currently in view.' };
+  const { rect, handle } = best;
+  return {
+    rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+    viewport: { width: window.innerWidth, height: window.innerHeight },
+    handle,
+  };
+}
 
 type Phase = 'idle' | 'capturing' | 'streaming' | 'done' | 'error';
 
@@ -24,13 +52,16 @@ export function CaptureView() {
 
       let response: ContentResponse | undefined;
       try {
-        response = (await browser.tabs.sendMessage(tab.id, {
-          type: GET_FOCUSED_TWEET_RECT,
-        })) as ContentResponse;
+        const [injection] = await browser.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: findFocusedTweetRect,
+        });
+        response = injection?.result as ContentResponse | undefined;
       } catch {
-        throw new Error('Open x.com in the active tab, then capture.');
+        throw new Error('Open an X timeline or post in the active tab, then capture.');
       }
-      if (isErrorResponse(response)) throw new Error(response?.error ?? 'No tweet found.');
+      if (!response) throw new Error('No tweet found on the page.');
+      if ('error' in response) throw new Error(response.error);
 
       const imageDataUrl = await captureFocusedTweet(response.rect, response.viewport);
       setState({ phase: 'streaming', text: '', image: imageDataUrl });

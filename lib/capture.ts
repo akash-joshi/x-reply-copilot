@@ -71,9 +71,10 @@ export async function captureFocusedTweet(tweet: Rect, viewport: Size): Promise<
   const stream = await navigator.mediaDevices.getDisplayMedia({
     video: true,
     audio: false,
-    // Chrome-only hint to bias the picker toward the current tab.
-    preferCurrentTab: true,
-  } as MediaStreamConstraints & { preferCurrentTab: boolean });
+    // getDisplayMedia runs in the side panel, so preferCurrentTab would target the
+    // panel itself. Instead, exclude our own surface and let the user pick the X tab.
+    selfBrowserSurface: 'exclude',
+  } as MediaStreamConstraints & { selfBrowserSurface: 'exclude' });
 
   try {
     const [track] = stream.getVideoTracks();
