@@ -24,3 +24,6 @@ web-ext.config.ts
 *.njsproj
 *.sln
 *.sw?
+
+# Personal real timeline captures (never commit these)
+test/fixtures/*.local.html

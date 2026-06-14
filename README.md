@@ -57,10 +57,16 @@ The screen-capture picker and side-panel gesture require a human, so this last s
 
 The DOM-coupled features (timeline pills) are developed against a static snapshot of an
 X timeline at `test/fixtures/timeline.html`, served locally — the capture→vision path uses
-screen pixels and is unaffected by X markup. Live X is only needed for a final selector
-check: paste `scripts/drift-probe.js` into the DevTools console on a real timeline to see,
-per tweet, which `tweet-dom` selectors still resolve. If most come back missing, refresh
-the fixture and update `lib/tweet-dom.ts`.
+screen pixels and is unaffected by X markup. The committed fixture is **synthetic and
+anonymised** (fake accounts/text) so the repo carries no real timeline data; it still
+mirrors the DOM hooks the selectors and tests depend on.
+
+To iterate against a real timeline locally, capture one (DevTools → copy the timeline
+`outerHTML`) and save it as `test/fixtures/timeline.local.html` — that pattern is gitignored
+so personal data never gets committed. Live X is only needed for a final selector check:
+paste `scripts/drift-probe.js` into the DevTools console on a real timeline to see, per
+tweet, which `tweet-dom` selectors still resolve. If most come back missing, update
+`lib/tweet-dom.ts`.
 
 ## Architecture
 
