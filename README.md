@@ -29,6 +29,26 @@ The default settings target `http://localhost:11434/v1` with `qwen3.5:9b`. Chang
 base URL, model, API key, and system prompt in the side panel's Settings section to use
 a different model or a hosted OpenAI-compatible provider.
 
+### Using Grok via the CLI (no API key)
+
+If you have the [Grok CLI](https://docs.x.ai/build/cli) installed and authenticated
+(`grok login` — uses your SuperGrok / X Premium session, no separate key), you can route
+the vision call through it with a small local bridge:
+
+```bash
+npm run grok-bridge      # OpenAI-compatible server on http://localhost:11435/v1
+```
+
+Then in the side panel Settings set **Base URL** to `http://localhost:11435/v1`, leave the
+API key empty, and capture as usual. The bridge writes the captured tweet image to a temp
+file, runs `grok -p "<file> <prompt>" --output-format json`, and streams the answer back in
+the OpenAI shape the extension expects. See `scripts/grok-bridge.mjs`.
+
+This is the only way to use Grok keylessly here — xAI's subscription OAuth can't be
+registered for a browser extension, and the CLI can't be exec'd from one, so the bridge
+sits in between. To use Grok with an **API key** instead, just point the Base URL at
+`https://api.x.ai/v1` with a vision model — no bridge needed.
+
 ### Allow the extension's origin
 
 Ollama rejects requests whose `Origin` isn't allow-listed, and a browser extension's

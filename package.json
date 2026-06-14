@@ -11,6 +11,7 @@
     "compile": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "grok-bridge": "node scripts/grok-bridge.mjs",
     "postinstall": "wxt prepare"
   },
   "dependencies": {

@@ -10,7 +10,8 @@ export default defineConfig({
     host_permissions: [
       'https://x.com/*',
       'https://twitter.com/*',
-      'http://localhost:11434/*',
+      // Any local port: covers Ollama (11434) and the optional Grok bridge (11435).
+      'http://localhost/*',
     ],
     action: {},
   },
