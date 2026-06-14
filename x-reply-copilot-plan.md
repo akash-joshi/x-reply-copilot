@@ -282,7 +282,7 @@ Implement the crop math, then the capture wrapper around it.
 COMMIT, then proceed to commit 8.
 
 ---
-⬜ Commit 8: Wire full capture→vision→reply flow + results UI
+✅ Commit 8: Wire full capture→vision→reply flow + results UI
 
 ### Brief requirement
 End-to-end: click "Capture focused tweet" → cropped image → streamed analysis + suggested
