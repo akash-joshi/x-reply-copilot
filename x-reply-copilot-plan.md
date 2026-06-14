@@ -106,7 +106,7 @@ side-panel gesture, pill injection/MutationObserver, live LLM round-trip → man
 
 ---
 
-⬜ Commit 1: Project scaffold + loadable empty extension
+✅ Commit 1: Project scaffold + loadable empty extension
 
 ### Brief requirement
 A buildable WXT+TS project that loads in Chrome and opens an empty side panel on icon click.
