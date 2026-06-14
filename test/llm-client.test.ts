@@ -3,6 +3,7 @@ import {
   buildChatRequest,
   parseNonStream,
   parseStreamLine,
+  BASE_USER_INSTRUCTION,
   type ContentPart,
 } from '../lib/llm-client';
 import type { LlmConfig } from '../lib/types';
@@ -20,6 +21,13 @@ function userImagePart(config: LlmConfig) {
   const userMessage = request.body.messages.find((message) => message.role === 'user')!;
   const parts = userMessage.content as ContentPart[];
   return parts.find((part) => part.type === 'image_url');
+}
+
+function userPromptText(userText?: string): string {
+  const request = buildChatRequest({ config: BASE_CONFIG, imageDataUrl: IMAGE_DATA_URL, userText });
+  const userMessage = request.body.messages.find((message) => message.role === 'user')!;
+  const part = (userMessage.content as ContentPart[]).find((part) => part.type === 'text');
+  return part && part.type === 'text' ? part.text : '';
 }
 
 describe('buildChatRequest', () => {
@@ -54,6 +62,17 @@ describe('buildChatRequest', () => {
       imageDataUrl: IMAGE_DATA_URL,
     });
     expect(request.url).toBe('http://localhost:11434/v1/chat/completions');
+  });
+
+  it('uses the base instruction when no direction is given', () => {
+    expect(userPromptText()).toContain(BASE_USER_INSTRUCTION);
+  });
+
+  it("keeps the base instruction and appends the user's direction", () => {
+    const direction = 'Reply sarcastically, in under 10 words.';
+    const prompt = userPromptText(direction);
+    expect(prompt).toContain(BASE_USER_INSTRUCTION);
+    expect(prompt).toContain(direction);
   });
 });
 

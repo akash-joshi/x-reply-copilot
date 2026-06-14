@@ -43,6 +43,7 @@ interface CaptureState {
 
 export function CaptureView() {
   const [state, setState] = useState<CaptureState>({ phase: 'idle', text: '' });
+  const [direction, setDirection] = useState('');
 
   const onCapture = async () => {
     setState({ phase: 'capturing', text: '' });
@@ -67,7 +68,11 @@ export function CaptureView() {
       setState({ phase: 'streaming', text: '', image: imageDataUrl });
 
       const settings = await getSettings();
-      const request = buildChatRequest({ config: settings.llm, imageDataUrl });
+      const request = buildChatRequest({
+        config: settings.llm,
+        imageDataUrl,
+        userText: direction.trim() || undefined,
+      });
 
       let accumulated = '';
       for await (const delta of streamChat(request)) {
@@ -89,6 +94,19 @@ export function CaptureView() {
 
   return (
     <section>
+      <textarea
+        value={direction}
+        onChange={(event) => setDirection(event.target.value)}
+        placeholder="Optional: how should it reply? e.g. 'be funny and concise', 'agree and add a stat', 'reply in French'"
+        rows={2}
+        style={{
+          width: '100%',
+          boxSizing: 'border-box',
+          marginBottom: 8,
+          fontFamily: 'system-ui, sans-serif',
+          fontSize: 13,
+        }}
+      />
       <button onClick={onCapture} disabled={busy} style={{ padding: '8px 12px', fontSize: 14 }}>
         {busy ? 'Working…' : 'Capture focused tweet'}
       </button>

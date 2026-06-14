@@ -23,6 +23,9 @@ export interface ChatRequest {
 
 const trimTrailingSlash = (url: string) => url.replace(/\/+$/, '');
 
+/** The always-present ask. An optional user direction is appended to it. */
+export const BASE_USER_INSTRUCTION = 'Analyse this tweet and suggest a reply.';
+
 export function buildChatRequest(params: {
   config: LlmConfig;
   imageDataUrl: string;
@@ -34,8 +37,12 @@ export function buildChatRequest(params: {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (config.apiKey) headers.Authorization = `Bearer ${config.apiKey}`;
 
+  const promptText = userText
+    ? `${BASE_USER_INSTRUCTION}\n\nAdditional direction for the reply: ${userText}`
+    : BASE_USER_INSTRUCTION;
+
   const userContent: ContentPart[] = [
-    { type: 'text', text: userText ?? 'Analyse this tweet and suggest a reply.' },
+    { type: 'text', text: promptText },
     { type: 'image_url', image_url: { url: imageDataUrl } },
   ];
 
