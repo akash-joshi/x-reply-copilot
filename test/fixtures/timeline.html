@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X timeline fixture (synthetic)</title>
+<!--
+  Synthetic, anonymised stand-in for an X timeline. It reproduces the DOM hooks the
+  extension relies on (article[data-testid="tweet"], User-Name, time[datetime],
+  the reply/retweet/like buttons with count aria-labels, verified badge, role="group"
+  action bar) using entirely fake accounts and text. No real user data. The first
+  tweet intentionally has 1 reply, 0 reposts, 7 likes, and a verified badge because
+  the tests assert those exact values.
+-->
+<style>
+  body { background: #000; color: #e7e9ea; font-family: system-ui, sans-serif; margin: 0; }
+  [data-testid="primaryColumn"] { max-width: 600px; margin: 0 auto; }
+  [data-testid="cellInnerDiv"] { border-bottom: 1px solid #2f3336; padding: 12px 16px; }
+  [data-testid="User-Name"] { font-weight: 600; }
+  [data-testid="User-Name"] .handle, [data-testid="User-Name"] time { color: #71767b; font-weight: 400; }
+  [data-testid="tweetText"] { margin: 4px 0 8px; }
+  [data-testid="tweetPhoto"] { height: 160px; background: #16181c; border-radius: 12px; }
+  [role="group"] { display: flex; gap: 48px; color: #71767b; margin-top: 8px; }
+  svg[aria-label="Verified account"] { color: #1d9bf0; }
+</style>
+</head>
+<body>
+<div data-testid="primaryColumn">
+
+  <div data-testid="cellInnerDiv">
+    <article role="article" data-testid="tweet">
+      <div data-testid="User-Name">
+        <span>Sample Account</span>
+        <svg aria-label="Verified account" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"></circle></svg>
+        <span class="handle">@user_a</span>
+        <span>·</span>
+        <time datetime="2026-06-14T17:55:00.000Z">5m</time>
+      </div>
+      <div data-testid="tweetText">Shipping a small thing today. Curious what everyone's weekend project is.</div>
+      <div data-testid="tweetPhoto" aria-label="Image"></div>
+      <div role="group" aria-label="1 reply, 0 reposts, 7 likes">
+        <button data-testid="reply" aria-label="1 Reply. Reply"></button>
+        <button data-testid="retweet" aria-label="0 reposts. Repost"></button>
+        <button data-testid="like" aria-label="7 Likes. Like"></button>
+      </div>
+    </article>
+  </div>
+
+  <div data-testid="cellInnerDiv">
+    <article role="article" data-testid="tweet">
+      <div data-testid="User-Name">
+        <span>Builder Bee</span>
+        <svg aria-label="Verified account" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"></circle></svg>
+        <span class="handle">@user_b</span>
+        <span>·</span>
+        <time datetime="2026-06-14T16:00:00.000Z">2h</time>
+      </div>
+      <div data-testid="tweetText">Hot take: the best abstraction is the one you didn't write.</div>
+      <div role="group" aria-label="3 replies, 12 reposts, 240 likes">
+        <button data-testid="reply" aria-label="3 Replies. Reply"></button>
+        <button data-testid="retweet" aria-label="12 reposts. Repost"></button>
+        <button data-testid="like" aria-label="240 Likes. Like"></button>
+      </div>
+    </article>
+  </div>
+
+  <div data-testid="cellInnerDiv">
+    <article role="article" data-testid="tweet">
+      <div data-testid="User-Name">
+        <span>Casual Dev</span>
+        <span class="handle">@user_c</span>
+        <span>·</span>
+        <time datetime="2026-06-13T12:00:00.000Z">1d</time>
+      </div>
+      <div data-testid="tweetText">Anyone else's CI mysteriously green only on Fridays?</div>
+      <div role="group" aria-label="88 replies, 4 reposts, 33 likes">
+        <button data-testid="reply" aria-label="88 Replies. Reply"></button>
+        <button data-testid="retweet" aria-label="4 reposts. Repost"></button>
+        <button data-testid="like" aria-label="33 Likes. Like"></button>
+      </div>
+    </article>
+  </div>
+
+  <div data-testid="cellInnerDiv">
+    <article role="article" data-testid="tweet">
+      <div data-testid="User-Name">
+        <span>Data Nerd</span>
+        <svg aria-label="Verified account" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"></circle></svg>
+        <span class="handle">@user_d</span>
+        <span>·</span>
+        <time datetime="2026-06-14T17:40:00.000Z">20m</time>
+      </div>
+      <div data-testid="tweetText">A chart is worth a thousand dashboards.</div>
+      <div data-testid="tweetPhoto" aria-label="Image"></div>
+      <div role="group" aria-label="0 replies, 1 repost, 410 likes">
+        <button data-testid="reply" aria-label="0 Replies. Reply"></button>
+        <button data-testid="retweet" aria-label="1 repost. Repost"></button>
+        <button data-testid="like" aria-label="410 Likes. Like"></button>
+      </div>
+    </article>
+  </div>
+
+  <div data-testid="cellInnerDiv">
+    <article role="article" data-testid="tweet">
+      <div data-testid="User-Name">
+        <span>Night Owl</span>
+        <span class="handle">@user_e</span>
+        <span>·</span>
+        <time datetime="2026-06-11T03:00:00.000Z">3d</time>
+      </div>
+      <div data-testid="tweetText">Going viral is mostly survivorship bias and good timing.</div>
+      <div role="group" aria-label="1500 replies, 0 reposts, 2 likes">
+        <button data-testid="reply" aria-label="1500 Replies. Reply"></button>
+        <button data-testid="retweet" aria-label="0 reposts. Repost"></button>
+        <button data-testid="like" aria-label="2 Likes. Like"></button>
+      </div>
+    </article>
+  </div>
+
+</div>
+</body>
+</html>
