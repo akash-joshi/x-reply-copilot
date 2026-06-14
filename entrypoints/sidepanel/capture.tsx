@@ -45,11 +45,12 @@ export function CaptureView() {
       }
       setState((current) => ({ ...current, phase: 'done' }));
     } catch (error) {
-      setState({
-        phase: 'error',
-        text: '',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      const raw = error instanceof Error ? error.message : String(error);
+      // fetch() rejects with a terse "Failed to fetch" when the model server is unreachable.
+      const message = /failed to fetch/i.test(raw)
+        ? 'Could not reach the model server. Is Ollama running on the configured base URL?'
+        : raw;
+      setState({ phase: 'error', text: '', error: message });
     }
   };
 

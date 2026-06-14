@@ -21,15 +21,33 @@ npm test             # unit tests (scoring, LLM client, crop math, DOM parsing)
 ### Local model
 
 ```bash
-ollama pull qwen2.5-vl     # or: llama3.2-vision
+ollama pull qwen2.5vl:3b   # the default model; or llama3.2-vision / qwen2.5vl:7b
 ollama serve               # http://localhost:11434
 ```
+
+The default settings target `http://localhost:11434/v1` with `qwen2.5vl:3b`. Change the
+base URL, model, API key, and system prompt in the side panel's Settings section to use
+a larger model or a hosted OpenAI-compatible provider.
+
+### End-to-end check
+
+1. `npm run build`, then load `.output/chrome-mv3` via `chrome://extensions` → Load unpacked.
+2. Serve the saved timeline: `python3 -m http.server --directory test/fixtures 3000`, open
+   `http://localhost:3000/timeline.html`. Green/red pills should appear on the tweets.
+3. Click the extension icon to open the side panel, centre a tweet, click **Capture focused
+   tweet**, and pick the tab in the share picker. The panel shows the cropped image, then a
+   streamed analysis and suggested reply.
+
+The screen-capture picker and side-panel gesture require a human, so this last step is manual.
 
 ### Developing against a saved timeline (no live X)
 
 The DOM-coupled features (timeline pills) are developed against a static snapshot of an
-X timeline at `test/fixtures/timeline.html`, served locally — see the plan for why and
-how. Live X is only needed for a final manual selector check.
+X timeline at `test/fixtures/timeline.html`, served locally — the capture→vision path uses
+screen pixels and is unaffected by X markup. Live X is only needed for a final selector
+check: paste `scripts/drift-probe.js` into the DevTools console on a real timeline to see,
+per tweet, which `tweet-dom` selectors still resolve. If most come back missing, refresh
+the fixture and update `lib/tweet-dom.ts`.
 
 ## Architecture
 

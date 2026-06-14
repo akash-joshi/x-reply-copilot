@@ -307,7 +307,7 @@ below) — live X only as an optional final smoke test.
 COMMIT, then proceed to commit 9.
 
 ---
-⬜ Commit 9: Polish, resilience & README
+✅ Commit 9: Polish, resilience & README
 
 ### Brief requirement
 Graceful failure paths, image downscaling, configurable scoring threshold, setup docs.

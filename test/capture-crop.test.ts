@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeCropRect } from '../lib/capture';
+import { computeCropRect, fitWithin } from '../lib/capture';
 
 const TWEET = { left: 100, top: 200, width: 300, height: 150 };
 
@@ -37,5 +37,22 @@ describe('computeCropRect', () => {
     const crop = computeCropRect(offScreen, frame, frame);
     expect(crop.sx).toBe(0);
     expect(crop.sy).toBe(0);
+  });
+});
+
+describe('fitWithin', () => {
+  const MAX = 1024;
+
+  it('shrinks the longest edge to the maximum, preserving aspect ratio', () => {
+    expect(fitWithin(2000, 1000, MAX)).toEqual({ width: MAX, height: MAX / 2 });
+  });
+
+  it('handles a tall image by clamping its height', () => {
+    expect(fitWithin(1000, 2000, MAX)).toEqual({ width: MAX / 2, height: MAX });
+  });
+
+  it('never upscales an image already within bounds', () => {
+    const small = { width: 100, height: 80 };
+    expect(fitWithin(small.width, small.height, MAX)).toEqual(small);
   });
 });
