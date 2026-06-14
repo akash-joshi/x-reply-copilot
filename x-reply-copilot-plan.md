@@ -257,7 +257,7 @@ Implement until green.
 COMMIT, then proceed to commit 7.
 
 ---
-⬜ Commit 7: Capture + crop (crop math TDD, capture manual)
+✅ Commit 7: Capture + crop (crop math TDD, capture manual)
 
 ### Brief requirement
 Capture the focused tweet as a cropped base64 PNG via screen capture.
