@@ -179,7 +179,7 @@ Implement `lib/scoring.ts` until green.
 COMMIT, then proceed to commit 4.
 
 ---
-⬜ Commit 4: Tweet DOM extraction + content-script signal reading
+✅ Commit 4: Tweet DOM extraction + content-script signal reading
 
 ### Brief requirement
 Extract `TweetSignals` (author, reply/repost/like counts, timestamp→age, verified, hasMedia)
