@@ -129,7 +129,7 @@ clicking the icon opens an empty side panel.
 COMMIT, then proceed to commit 2.
 
 ---
-⬜ Commit 2: Settings storage + settings UI
+✅ Commit 2: Settings storage + settings UI
 
 ### Brief requirement
 Persist `{ baseUrl, apiKey, model, systemPrompt }` and edit them in the panel.
@@ -153,7 +153,7 @@ Implement `getSettings`/`setSettings` and the form until tests pass.
 COMMIT, then proceed to commit 3.
 
 ---
-⬜ Commit 3: Scoring heuristic (pure, fully TDD)
+✅ Commit 3: Scoring heuristic (pure, fully TDD)
 
 ### Brief requirement
 `scoreTweet(signals)` returns `{ score, tier: green|red, reasons[] }` from DOM-derived signals.
